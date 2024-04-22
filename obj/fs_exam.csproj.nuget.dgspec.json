@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\nicoe\\OneDrive\\Escritorio\\fs_exam\\fs_exam.csproj": {}
+    "C:\\Users\\nicoe\\OneDrive\\Escritorio\\semester project\\fs_exam\\fs_exam.csproj": {}
   },
   "projects": {
-    "C:\\Users\\nicoe\\OneDrive\\Escritorio\\fs_exam\\fs_exam.csproj": {
+    "C:\\Users\\nicoe\\OneDrive\\Escritorio\\semester project\\fs_exam\\fs_exam.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\nicoe\\OneDrive\\Escritorio\\fs_exam\\fs_exam.csproj",
+        "projectUniqueName": "C:\\Users\\nicoe\\OneDrive\\Escritorio\\semester project\\fs_exam\\fs_exam.csproj",
         "projectName": "fs_exam",
-        "projectPath": "C:\\Users\\nicoe\\OneDrive\\Escritorio\\fs_exam\\fs_exam.csproj",
+        "projectPath": "C:\\Users\\nicoe\\OneDrive\\Escritorio\\semester project\\fs_exam\\fs_exam.csproj",
         "packagesPath": "C:\\Users\\nicoe\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\nicoe\\OneDrive\\Escritorio\\fs_exam\\obj\\",
+        "outputPath": "C:\\Users\\nicoe\\OneDrive\\Escritorio\\semester project\\fs_exam\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
           "C:\\Users\\nicoe\\AppData\\Roaming\\NuGet\\NuGet.Config"

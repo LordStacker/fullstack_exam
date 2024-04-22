@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("fs_exam")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+97f752a9a19a985e6a42147c9f1ed6aad663558a")]
 [assembly: System.Reflection.AssemblyProductAttribute("fs_exam")]
 [assembly: System.Reflection.AssemblyTitleAttribute("fs_exam")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]
