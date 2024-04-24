@@ -38,7 +38,7 @@ namespace repository
             user_id as {nameof(User.Id)},
             username as {nameof(User.Username)},
             email as {nameof(User.Email)}
-            from public.user where id=@id;", new {id = id});
+            from public.user where user_id=@id;", new {id = id});
         }
 
         public User CheckIfUsernameExists(string username)
@@ -70,7 +70,7 @@ namespace repository
         {
              using var connection = _dataSource.OpenConnection();
 
-            return connection.QueryFirst(@$"insert into public.user
+            return connection.QueryFirst<User>(@$"insert into public.user
             (username, email, password) values (@username,@email , @password)
             Returning *;", 
             new {username = user.Username, email = user.Email, password = user.Password});
