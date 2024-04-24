@@ -1,8 +1,5 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using Dapper;
+using Microsoft.VisualBasic;
 using Npgsql;
 using repository.Interfaces;
 using repository.Models;
@@ -41,16 +38,19 @@ namespace repository
             from public.user where user_id=@id;", new {id = id});
         }
 
-        public User CheckIfUsernameExists(string username)
+        public User CheckIfUsernameExists(string usernameToCheck)
         {
+
             using var connection = _dataSource.OpenConnection();
 
-            return connection.QueryFirst<User>($@"Select
+            var user = connection.QueryFirstOrDefault<User>($@"Select
             user_id as {nameof(User.Id)},
             username as {nameof(User.Username)},
             email as {nameof(User.Email)},
             password as {nameof(User.Password)}
-            from public.user where username=@username;", username);
+            from public.user where username = @usernameToCheck;", new {usernameToCheck})!;
+
+            return user ?? new User();
         }
 
         public User ValidateUser(string username, string password)

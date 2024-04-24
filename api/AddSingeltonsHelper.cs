@@ -1,9 +1,5 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Npgsql.Replication;
 using repository;
+using service;
 
 namespace api
 {
@@ -19,7 +15,8 @@ namespace api
             );
 
             //Adding singeltons
-    
+            services.AddSingleton<UserService>();
+            services.AddSingleton<UserRepository>();
         }
     }
 }
