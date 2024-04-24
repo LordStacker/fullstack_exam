@@ -17,6 +17,8 @@ namespace api
             //Adding singeltons
             services.AddSingleton<UserService>();
             services.AddSingleton<UserRepository>();
+            services.AddSingleton<DeviceService>();
+            services.AddSingleton<DeviceRepository>();
         }
     }
 }

@@ -38,7 +38,7 @@ namespace repository
             device_id as {nameof(Device.Id)},
             device_name as {nameof(Device.DeviceName)},
             user_id as {nameof(Device.UserId)}
-            from public.device where device_id=@id;
+            from public.device where device_id= @id;
             ", new {id});
         }
         public Device CreateDevice(Device device)
@@ -54,7 +54,7 @@ namespace repository
         {
             using var connection = _dataSource.OpenConnection();
 
-            connection.Execute($@"Delete from public.device where id=@id", id);
+            connection.Execute($@"Delete from public.device where device_id=@id", new {id});
         }
 
         
