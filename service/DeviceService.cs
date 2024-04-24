@@ -1,7 +1,3 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using repository;
 using repository.Models;
 
@@ -9,76 +5,62 @@ namespace service
 {
     public class DeviceService
     {
-        private readonly UserRepository _repository;
+        private readonly DeviceRepository _deviceRepository;
 
-        public DeviceService(UserRepository repository)
+        public DeviceService(DeviceRepository deviceRepository)
         {
-            _repository = repository;
+            _deviceRepository = deviceRepository;
         }
 
-        public IEnumerable<User> GetAllUsers()
+        public IEnumerable<Device> GetAllDevices()
         {
             try
             {
-                return (IEnumerable<User>)_repository.GetAllUsers();
+                return _deviceRepository.GetAllDevices();
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
-                throw new Exception($"Could not get all the users due to this exception: {ex.Message}");
+                throw new Exception($"Could not get all devices due to this error: {ex.Message}");
             }
         }
-        public User GetUserById(int id)
+        public Device GetDevice(int id)
         {
             try 
             {
-                return _repository.GetUserById(id);
-            }
-            catch (Exception ex)
-            {
-                throw new Exception($"Could not find user with id: {id} {ex.Message}");
-            }
-        }
-        public User CheckIfUsernameExists(string username)
-        {
-            try
-            {
-                return _repository.CheckIfUsernameExists(username);
-            }
-            catch (Exception ex)
-            {
-                throw new Exception($"Could not find username {username} {ex.Message}");
-            }
-        }
-        public User ValidateUser(string username, string password)
-        {
-            try
-            {
-                return _repository.ValidateUser(username, password);
+                return _deviceRepository.GetDeviceById(id);
             }
             catch(Exception ex)
             {
-                throw new Exception($"Could not find user with username and password {username} {password} due: {ex.Message}");
+                throw new Exception($"Could not get device with id: {id} due to: {ex.Message}");
             }
         }
-        public User CreateUser(string username, string email, string password)
+        public Device CreateDevice(string deviceName, int userId)
         {
-            var userToCreate = new User
+            var deviceToCreate = new Device
             {
-                Username = username,
-                Email = email,
-                Password = password
+                DeviceName = deviceName,
+                UserId = userId
             };
 
             try
             {
-                return _repository.CreateUser(userToCreate);
+                return _deviceRepository.CreateDevice(deviceToCreate);  
             }
             catch(Exception ex)
             {
-                throw new Exception($"Could not create user this user due to this error: {ex.Message}");
+                throw new Exception($"Could not create this device due to this error: {ex.Message}");
             }
         }
-
-
+        public void DeleteDevice(int id)
+        {
+            try
+            {
+                _deviceRepository.DeleteDevice(id);
+            }
+            catch(Exception ex)
+            {
+                throw new Exception($"Could not delete device with id: {id} due to this error: {ex.Message}");
+            }
+        }
     }
 }

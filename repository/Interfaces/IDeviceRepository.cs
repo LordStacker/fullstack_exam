@@ -8,7 +8,7 @@ namespace repository.Interfaces
 {
     public interface IDeviceRepository
     {
-        Task<IEnumerable<Device>> GetAllDevices();
+        IEnumerable<Device> GetAllDevices();
         Device GetDeviceById(int id);
         Device CreateDevice(Device device);
         void DeleteDevice(int id);

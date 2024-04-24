@@ -18,11 +18,11 @@ namespace repository
             _dataSource = dataSource;
         }
 
-        public async Task<IEnumerable<Device>> GetAllDevices()
+        public IEnumerable<Device> GetAllDevices()
         {
-            await using var connection = _dataSource.OpenConnection();
+            using var connection = _dataSource.OpenConnection();
 
-            return await connection.QueryAsync<Device>($@"select
+            return  connection.Query<Device>($@"select
             device_id as {nameof(Device.Id)},
             device_name as {nameof(Device.DeviceName)},
             user_id as {nameof(Device.UserId)}
