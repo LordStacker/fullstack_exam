@@ -62,7 +62,7 @@ namespace repository
             username as {nameof(User.Username)},
             email as {nameof(User.Email)},
             password as {nameof(User.Password)}
-            from * public.user where username=@username and password=@password;
+            from public.user where username=@username and password=@password;
             ", new {username, password});
         }
 
