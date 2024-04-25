@@ -34,7 +34,7 @@ namespace api.ClientEventHandlers
                 {
                      var messageFromServer = new ServerReturnsADevice
                     {
-                        MessageBack = "There is a something wrong idk :(",
+                        MessageBack = "There is something wrong idk :(",
                         Device = device
                     };
                     socket.Send(JsonSerializer.Serialize(messageFromServer));
