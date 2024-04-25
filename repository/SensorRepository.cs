@@ -55,9 +55,19 @@ namespace repository
                     humidity = sensor.Humidity, date = sensor.Date});
         }
 
-        public Sensor UpdateSensor(Sensor sensor)
+        public Sensor UpdateSensor(Sensor sensor, int sensorId)
         {
-            throw new NotImplementedException();
+            using var connection = _dataSource.OpenConnection();
+
+            return connection.QueryFirst<Sensor>($@"update  public.sensor
+            SET
+            sound_level = @soundLevel,
+            temperature = @temperature,
+            humidity = @humidity,
+            date = @date
+            WHERE sensor_id = @sensorId
+            RETURNING *;", new {soundLevel = sensor.SoundLevel, temperature = sensor.Tempreature,
+                                humidity = sensor.Humidity, date = sensor.Date, sensorId});
         }
 
         public void DeleteSensor(int sensorId)

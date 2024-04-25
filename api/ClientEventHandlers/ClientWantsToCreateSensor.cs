@@ -19,7 +19,7 @@ namespace api.ClientEventHandlers
         public override Task Handle(ClientWantsToCreateSensorDto dto, IWebSocketConnection socket)
         {
             if(dto.DeviceId == 0 && dto.SoundLevel == 0 && dto.Temperature == 0 && dto.Humidity == 0)
-                throw new Exception("There is no sensor to create TF!");
+                throw new Exception("There is a missing property! Check it out or idk :)");
 
             sensorService.CreateSensor(dto.DeviceId, dto.SoundLevel, dto.Temperature, dto.Humidity, DateTime.Now);
             

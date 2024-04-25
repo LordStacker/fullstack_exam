@@ -65,6 +65,26 @@ namespace service
                 throw new Exception($"Could not delete sensor with id {sensorId} due to this: {ex.Message}");
             }
         }
+        public Sensor UpdateSensor(int sensorId, decimal soundLevel,
+                                     decimal temperature, decimal humidity)
+        {
+            var updatedSensor = new Sensor
+            {
+                SoundLevel = soundLevel,
+                Tempreature = temperature,
+                Humidity = humidity,
+                Date = DateTime.UtcNow
+            };
+
+            try
+            {
+                return _sensorRepository.UpdateSensor(updatedSensor, sensorId);
+            }
+            catch (Exception ex)
+            {
+                throw new Exception($"Sensor {sensorId} was not updated due to: {ex.Message}");
+            }
+        }
 
     }
 }
