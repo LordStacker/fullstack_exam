@@ -50,8 +50,8 @@ namespace repository
             return connection.QueryFirst<Sensor>($@"insert into
             public.sensor (device_id, sound_level, temperature, humidity, date)
             values (@deviceId, @soundLevel, @temperature, @humidity, @date)
-            returning *;
-            ", new {deviceId = sensor.DeviceId, soundLevel = sensor.SoundLevel, temperature = sensor.Tempreature,
+            returning *;",
+             new {deviceId = sensor.DeviceId, soundLevel = sensor.SoundLevel, temperature = sensor.Tempreature,
                     humidity = sensor.Humidity, date = sensor.Date});
         }
 
