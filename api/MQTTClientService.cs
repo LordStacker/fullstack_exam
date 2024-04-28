@@ -18,15 +18,24 @@ namespace api
                 mqttClient = mqttFactory.CreateMqttClient();
 
                 var mqttClientOptions = new MqttClientOptionsBuilder()
-                    .WithTcpServer("mqtt.flespi.io", 443)
-                    .WithClientId("mqtt-board-panel-322475a2")
-                    .WithCredentials("KtuM5fQVb7jbK5yEChfw9qWbaEaVBSjflO5IfgAaTVOocuwrSCMnVZeuU22bjA5e", "")
-                    .WithProtocolVersion(MqttProtocolVersion.V311)
+                    .WithTcpServer("mqtt.flespi.io", 1883)
+                    .WithCredentials(Environment.GetEnvironmentVariable("flespiconn"), "")
+                    .WithProtocolVersion(MqttProtocolVersion.V500)
                     .Build();
-
+                
                 await mqttClient.ConnectAsync(mqttClientOptions, CancellationToken.None);
                 Console.WriteLine("Connected to MQTT broker successfully.");
-                return true;
+                
+                var mqttSubscribeOptions = mqttFactory.CreateSubscribeOptionsBuilder()
+                    .WithTopicFilter(f => f.WithTopic(Environment.GetEnvironmentVariable("topic")))
+                    .Build();
+                await mqttClient.SubscribeAsync(mqttSubscribeOptions, CancellationToken.None);
+                mqttClient.ApplicationMessageReceivedAsync += async e =>
+                {
+                    Console.WriteLine(e.ApplicationMessage.ConvertPayloadToString());
+                };
+
+            return true;
             }
             catch (MqttCommunicationException ex)
             {

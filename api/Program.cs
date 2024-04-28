@@ -9,8 +9,12 @@ var builder = WebApplication.CreateBuilder(args);
 var clientEventHandlers = builder.FindAndInjectClientEventHandlers(Assembly.GetExecutingAssembly());
 
 builder.Services.AddSingeltons();
-var app = builder.Build();
 
+
+
+var app = builder.Build();
+var mqttClientService = app.Services.GetRequiredService<MqttClientService>();
+await mqttClientService.ConnectToBrokerAsync();
 var server = new WebSocketServer("ws://0.0.0.0:8181");
 
 var wsConnections = new List<IWebSocketConnection>();

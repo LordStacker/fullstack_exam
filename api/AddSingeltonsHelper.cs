@@ -11,7 +11,7 @@ namespace api
             services.AddNpgsqlDataSource(
                 Utilities.FormatConnectionString(
                     Environment.GetEnvironmentVariable("pgconn")!)
-                    , dataSourceBuilder => dataSourceBuilder.EnableParameterLogging()
+                , dataSourceBuilder => dataSourceBuilder.EnableParameterLogging()
             );
 
             //Adding singeltons
@@ -21,6 +21,7 @@ namespace api
             services.AddSingleton<DeviceRepository>();
             services.AddSingleton<SensorService>();
             services.AddSingleton<SensorRepository>();
+            services.AddSingleton<MqttClientService>();
         }
     }
 }
