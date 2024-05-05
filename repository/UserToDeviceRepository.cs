@@ -39,7 +39,7 @@ namespace repository
             inner join public.device as d on utd.device_id = d.id where utd.user_id=@id;
             ", id);
         }
-        public UserToDevice CreateDevice(UserToDevice userToDevice)
+        public UserToDevice CreateUserToDevice(UserToDevice userToDevice)
         {
             using var conn = _dataSource.OpenConnection();
 

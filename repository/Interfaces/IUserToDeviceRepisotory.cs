@@ -10,7 +10,7 @@ namespace repository.Interfaces
     {
         IEnumerable<UserToDevice> GetAllUserToDevice();
         UserToDevice GetUserToDeviceById(int id);
-        UserToDevice CreateDevice(UserToDevice device);
+        UserToDevice CreateUserToDevice(UserToDevice device);
         void DeleteUserToDevice(int id);
     }
 }
