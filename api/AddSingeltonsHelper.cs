@@ -22,6 +22,8 @@ namespace api
             services.AddSingleton<SensorService>();
             services.AddSingleton<SensorRepository>();
             services.AddSingleton<MqttClientService>();
+            services.AddSingleton<UserToDeviceService>();
+            services.AddSingleton<UserToDeviceRepository>();
         }
     }
 }
