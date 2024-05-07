@@ -1,4 +1,5 @@
-﻿using Fleck;
+﻿using System.Text.Json;
+using Fleck;
 using lib;
 using service;
 
@@ -12,18 +13,16 @@ public class ClientWantsToSignInDto : BaseDto
 
 public class ClientWantsToSignIn(UserService userService) : BaseEventHandler<ClientWantsToSignInDto>
 {
-    public override Task Handle(ClientWantsToSignInDto dto, IWebSocketConnection socket)
+    public override async Task Handle(ClientWantsToSignInDto dto, IWebSocketConnection socket)
     {
-        if (dto.Username != null && dto.Password != null)
+        if (string.IsNullOrEmpty(dto.Username) || string.IsNullOrEmpty(dto.Password))
         {
-            var currentUser = userService.ValidateUser(dto.Username, dto.Password); 
-            StateService.Connections[socket.ConnectionInfo.Id].User = currentUser;            
+            await socket.Send(JsonSerializer.Serialize(new { Error = "Username and password cannot be empty.", eventType = "ServerError" }));
+            return;
         }
-        else
-        {
-            throw new Exception("Somethings going on!");
-        }
-        
-        return Task.CompletedTask;
+
+        var currentUser = userService.ValidateUser(dto.Username, dto.Password);
+        StateService.Connections[socket.ConnectionInfo.Id].User = currentUser;
+        await socket.Send(JsonSerializer.Serialize(new { Message = "Sign-in successful", Username = currentUser.Username, eventType = "ServerConfirmsSignIn"}));
     }
 }
