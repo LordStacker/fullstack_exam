@@ -24,15 +24,15 @@ namespace service
                 throw new Exception($"Could not return all the sensors due to this: {ex.Message}");
             }
         }
-        public Sensor GetSensorById(int sensorId)
+        public Sensor GetSensorByUserId(int userId)
         {
             try
             {
-                return _sensorRepository.GetSensorById(sensorId);
+                return _sensorRepository.GetSensorByUserId(userId);
             }
             catch(Exception ex)
             {
-                throw new Exception($"Could not return the sensor with id: {sensorId} due to this: {ex.Message}");
+                throw new Exception($"Could not return the sensor with id: {userId} due to this: {ex.Message}");
             }
         }
         public Sensor CreateSensor(int deviceId, decimal soundLevel, int temperature, int humidity, DateTime date)
@@ -43,7 +43,7 @@ namespace service
                                             {
                                                 DeviceId = deviceId,
                                                 SoundLevel = soundLevel,
-                                                Tempreature =  temperature,
+                                                Temperature =  temperature,
                                                 Humidity =  humidity,
                                                 Date = date
                                             };
@@ -75,7 +75,7 @@ namespace service
             var updatedSensor = new Sensor
             {
                 SoundLevel = soundLevel,
-                Tempreature = temperature,
+                Temperature = temperature,
                 Humidity = humidity,
                 Date = DateTime.UtcNow
             };
