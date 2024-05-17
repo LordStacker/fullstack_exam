@@ -8,5 +8,4 @@ public class SensorData : BaseModel
     public int sound_level { get; set; }
     public double temperature { get; set; }
     public double humidity { get; set; }
-    public string date { get; set; }
 }
