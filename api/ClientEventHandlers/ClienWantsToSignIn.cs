@@ -1,5 +1,7 @@
-﻿using Fleck;
+﻿using System.Text.Json;
+using Fleck;
 using lib;
+using repository.Models;
 using service;
 
 namespace fs_exam;
@@ -12,18 +14,25 @@ public class ClientWantsToSignInDto : BaseDto
 
 public class ClientWantsToSignIn(UserService userService) : BaseEventHandler<ClientWantsToSignInDto>
 {
-    public override Task Handle(ClientWantsToSignInDto dto, IWebSocketConnection socket)
+    public override async Task Handle(ClientWantsToSignInDto dto, IWebSocketConnection socket)
     {
-        if (dto.Username != null && dto.Password != null)
+        if (string.IsNullOrEmpty(dto.Username) || string.IsNullOrEmpty(dto.Password))
         {
-            var currentUser = userService.ValidateUser(dto.Username, dto.Password); 
-            StateService.Connections[socket.ConnectionInfo.Id].User = currentUser;            
+            await socket.Send(JsonSerializer.Serialize(new { Error = "Username and password cannot be empty.", eventType = "ServerError" }));
+            return;
         }
-        else
+
+        User currentUser = null;
+        try
         {
-            throw new Exception("Somethings going on!");
+            currentUser = userService.ValidateUser(dto.Username, dto.Password);
+        }
+        catch (Exception e)
+        {
+            await socket.Send(JsonSerializer.Serialize(new { Message = "Failed to log in credentials wrong", eventType = "WrongCredentialsEvent" }));
         }
         
-        return Task.CompletedTask;
+        StateService.Connections[socket.ConnectionInfo.Id].User = currentUser;
+        await socket.Send(JsonSerializer.Serialize(new { Message = "SignInSuccessful", Username = currentUser.Username, user_id = currentUser.Id, eventType = "ServerConfirmsSignIn"}));
     }
 }
