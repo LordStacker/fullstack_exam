@@ -67,13 +67,49 @@ namespace repository
 
         public User CreateUser(User user)
         {
-             using var connection = _dataSource.OpenConnection();
+            using var connection = _dataSource.OpenConnection();
+    
+            using var transaction = connection.BeginTransaction();
+    
+            try
+            {
+               
+                var insertedUser = connection.QueryFirst<User>(
+                    @"INSERT INTO public.user
+              (username, email, password)
+              VALUES (@username, @email, @password)
+              RETURNING user_id AS Id, username, email, password;",
+                    user,
+                    transaction);
 
-            return connection.QueryFirst<User>(@$"insert into public.user
-            (username, email, password) values (@username,@email , @password)
-            Returning *;", 
-            new {username = user.Username, email = user.Email, password = user.Password});
+                var insertedDevice = connection.QueryFirst<Device>(
+                    @"INSERT INTO device
+              (device_name)
+              VALUES (@deviceName)
+              RETURNING device_id AS Id, device_name;",
+                    new { deviceName = user.Username },
+                    transaction);
+        
+                connection.Execute(
+                    @"INSERT INTO user_to_device
+              (user_id, device_id)
+              VALUES (@userId, @deviceId);",
+                    new { userId = insertedUser.Id, deviceId = insertedDevice.Id },
+                    transaction);
+
+                transaction.Commit();
+        
+                return insertedUser;
+            }
+            catch (Exception)
+            {
+                
+                transaction.Rollback();
+                throw; 
+            }
         }
+
+
 
         public void DeleteUser(int id)
         {

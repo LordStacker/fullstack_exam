@@ -13,8 +13,21 @@ builder.Services.AddSingeltons();
 
 
 var app = builder.Build();
+
 var mqttClientService = app.Services.GetRequiredService<MqttClientService>();
-await mqttClientService.ConnectToBrokerAsync();
+try
+{
+    await mqttClientService.ConnectToBrokerAsync();
+
+}
+catch (Exception e)
+{
+    Console.WriteLine(e.Message);
+    Console.WriteLine(e.InnerException);
+    Console.WriteLine(e.StackTrace);
+}
+
+
 var server = new WebSocketServer("ws://0.0.0.0:8181");
 
 var wsConnections = new List<IWebSocketConnection>();

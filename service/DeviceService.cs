@@ -34,12 +34,11 @@ namespace service
                 throw new Exception($"Could not get device with id: {id} due to: {ex.Message}");
             }
         }
-        public Device CreateDevice(string deviceName, int userId)
+        public Device CreateDevice(string deviceName)
         {
             var deviceToCreate = new Device
             {
-                DeviceName = deviceName,
-                UserId = userId
+                DeviceName = deviceName
             };
 
             try

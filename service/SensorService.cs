@@ -1,3 +1,4 @@
+using System.Text.Json;
 using repository;
 using repository.Models;
 
@@ -34,24 +35,27 @@ namespace service
                 throw new Exception($"Could not return the sensor with id: {sensorId} due to this: {ex.Message}");
             }
         }
-        public Sensor CreateSensor(int deviceId, decimal soundLevel, decimal temperature, decimal humidity, DateTime date)
+        public Sensor CreateSensor(int deviceId, decimal soundLevel, int temperature, int humidity, DateTime date)
         {
-            var sensorToCreate = new Sensor
-            {
-                DeviceId = deviceId,
-                SoundLevel = soundLevel,
-                Tempreature = temperature,
-                Humidity = humidity,
-                Date = date
-            };
-
+        
             try
-            {
+            {    var sensorToCreate = new Sensor
+                                            {
+                                                DeviceId = deviceId,
+                                                SoundLevel = soundLevel,
+                                                Tempreature =  temperature,
+                                                Humidity =  humidity,
+                                                Date = date
+                                            };
+                                            Console.WriteLine("new sensor: "+JsonSerializer.Serialize(sensorToCreate));
+
                 return  _sensorRepository.CreateSensor(sensorToCreate);
             }
             catch (Exception ex)
             {
-                throw new Exception($"Could not create the sensor: {sensorToCreate} due to: {ex.Message}");
+                Console.WriteLine(ex.Message);
+                throw;
+
             }
         }
         public void DeleteSensor(int sensorId)

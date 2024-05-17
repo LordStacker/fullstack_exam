@@ -17,10 +17,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="ClientEventFilters\" />
-  </ItemGroup>
-
-  <ItemGroup>
     <ProjectReference Include="..\repository\repository.csproj" />
     <ProjectReference Include="..\service\service.csproj" />
   </ItemGroup>

@@ -42,8 +42,8 @@ namespace repository
             using (var connection = _dataSource.OpenConnection())
 
             return connection.QueryFirst<Device>(@$"insert into public.device
-            (device_name, user_id) values (@deviceName, @userId)
-            returning *;", new {deviceName = device.DeviceName, userId = device.UserId});
+            (device_name) values (@deviceName)
+            returning *;", new {deviceName = device.DeviceName});
         }
 
         public void DeleteDevice(int id)

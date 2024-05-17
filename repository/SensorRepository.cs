@@ -45,14 +45,18 @@ namespace repository
 
         public Sensor CreateSensor(Sensor sensor)
         {
-            using var connection = _dataSource.OpenConnection();
+            using (var connection = _dataSource.OpenConnection())
+            {
+                Console.WriteLine("connection opened");
+                   return connection.QueryFirst<Sensor>($@"insert into
+                            public.sensor (device_id, sound_level, temperature, humidity, date)
+                            values (@deviceId, @soundLevel, @temperature, @humidity, @date)
+                            returning *;",
+                             new {deviceId = sensor.DeviceId, soundLevel = sensor.SoundLevel, temperature = sensor.Tempreature,
+                                    humidity = sensor.Humidity, date = sensor.Date});
+            }
 
-            return connection.QueryFirst<Sensor>($@"insert into
-            public.sensor (device_id, sound_level, temperature, humidity, date)
-            values (@deviceId, @soundLevel, @temperature, @humidity, @date)
-            returning *;",
-             new {deviceId = sensor.DeviceId, soundLevel = sensor.SoundLevel, temperature = sensor.Tempreature,
-                    humidity = sensor.Humidity, date = sensor.Date});
+         
         }
 
         public Sensor UpdateSensor(Sensor sensor, int sensorId)
