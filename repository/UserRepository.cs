@@ -120,6 +120,34 @@ namespace repository
         {
             throw new NotImplementedException();
         }
+        
+public Token UpsertToken(Token token)
+        {
+            using var connection = _dataSource.OpenConnection();
+
+            try
+            {
+                connection.QueryFirstOrDefault<Token>(
+                    @"INSERT INTO public.user_tokens
+              (user_id, fcm_token)
+              VALUES (@UserId, @TokenValue) ON CONFLICT (user_id) DO
+                UPDATE
+                SET fcm_token = @TokenValue
+                    ;", new Token {UserId = token.UserId, TokenValue = token.TokenValue});}
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
+                throw;
+            }
+               
+
+                
+
+          
+            
+
+            return token;
+        }
 
     }
 }
