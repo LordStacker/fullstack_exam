@@ -6,7 +6,7 @@ namespace fs_exam;
 
 public class ClientWantsToBroadcastToRoomDto : BaseDto
 {
-    public string message { get; set; }
+    public string? message { get; set; }
     public int roomId { get; set; }
 }
 
@@ -17,7 +17,7 @@ public class ClientsWantToBroadcastToRoom : BaseEventHandler<ClientWantsToBroadc
         var message = new ServerBroadcastsMessageWithUser()
         {
             message = dto.message,
-            user = StateService.Connections[socket.ConnectionInfo.Id].User
+            user = StateService.Connections[socket.ConnectionInfo.Id].User!.Username!
         };
         StateService.BroadcastToRoom(dto.roomId, JsonSerializer.Serialize(message));
         return Task.CompletedTask;
@@ -26,6 +26,6 @@ public class ClientsWantToBroadcastToRoom : BaseEventHandler<ClientWantsToBroadc
 
 public class ServerBroadcastsMessageWithUser : BaseDto
 {
-    public string message { get; set; }
-    public string user { get; set; }
+    public string? message { get; set; }
+    public string? user { get; set; }
 }

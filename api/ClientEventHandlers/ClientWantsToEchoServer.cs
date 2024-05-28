@@ -5,7 +5,7 @@ namespace fs_exam;
 
 public class ClientWantsToEchoServerDto : BaseDto
 {
-    public string messageContent { get; set; }
+    public string? messageContent { get; set; }
 }
 
 public class ClientWantsToEchoServer : BaseEventHandler<ClientWantsToEchoServerDto>
@@ -24,5 +24,5 @@ public class ClientWantsToEchoServer : BaseEventHandler<ClientWantsToEchoServerD
 
 public class ServerEchosClient
 {
-    public string echoValue { get; set; }
+    public string? echoValue { get; set; }
 }

@@ -24,5 +24,5 @@ public class ClientWantsToEnterRoom : BaseEventHandler<ClientWantsToEnterRoomDto
 
 public class ServerAddsClientToRoom : BaseDto
 {
-    public string message { get; set; }
+    public string? message { get; set; }
 }

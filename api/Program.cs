@@ -1,4 +1,5 @@
 using System.Reflection;
+using api;
 using Fleck;
 using fs_exam;
 using lib;
@@ -7,7 +8,25 @@ var builder = WebApplication.CreateBuilder(args);
 
 var clientEventHandlers = builder.FindAndInjectClientEventHandlers(Assembly.GetExecutingAssembly());
 
+builder.Services.AddSingeltons();
+
+
+
 var app = builder.Build();
+
+var mqttClientService = app.Services.GetRequiredService<MqttClientService>();
+try
+{
+    await mqttClientService.ConnectToBrokerAsync();
+
+}
+catch (Exception e)
+{
+    Console.WriteLine(e.Message);
+    Console.WriteLine(e.InnerException);
+    Console.WriteLine(e.StackTrace);
+}
+
 
 var server = new WebSocketServer("ws://0.0.0.0:8181");
 

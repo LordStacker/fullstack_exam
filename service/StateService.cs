@@ -1,11 +1,12 @@
 ﻿using Fleck;
+using repository.Models;
 
 namespace fs_exam;
 
 public class WebSocketWithMetaData(IWebSocketConnection connection)
 {
     public IWebSocketConnection Connection { get; set; } = connection;
-    public string User { get; set; }
+    public User? User { get; set; }
 }
 
 public static class StateService
