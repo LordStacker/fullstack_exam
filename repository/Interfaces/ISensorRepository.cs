@@ -9,7 +9,7 @@ namespace repository.Interfaces
     public interface ISensorRepository
     {
         IEnumerable<Sensor> GetAllSensors();
-        Sensor GetSensorById(int id);
+        Sensor GetSensorByUserId(int id);
         Sensor CreateSensor(Sensor sensor);
         Sensor UpdateSensor(Sensor sensor, int sensorId);
         void DeleteSensor(int sensorId);

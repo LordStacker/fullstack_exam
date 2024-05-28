@@ -11,7 +11,6 @@ namespace api.ClientEventHandlers
     public class ClientWantsToCreateDeviceDto : BaseDto
     {
         public string? DeviceName { get; set; }
-        public int UserId { get; set; }
     }
     public class ClientWantsToCreateDevice(DeviceService deviceService) : BaseEventHandler<ClientWantsToCreateDeviceDto>
     {
@@ -19,7 +18,7 @@ namespace api.ClientEventHandlers
         {
             if( dto.DeviceName != null )
             {
-                deviceService.CreateDevice(dto.DeviceName, dto.UserId);
+                deviceService.CreateDevice(dto.DeviceName);
             }
 
             return Task.CompletedTask;

@@ -1,8 +1,6 @@
 using Fleck;
 using lib;
-using repository.Models;
 using service;
-using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace api.ClientEventHandlers
 {
@@ -21,7 +19,7 @@ namespace api.ClientEventHandlers
             if(dto.DeviceId == 0 && dto.SoundLevel == 0 && dto.Temperature == 0 && dto.Humidity == 0)
                 throw new Exception("There is a missing property! Check it out or idk :)");
 
-            sensorService.CreateSensor(dto.DeviceId, dto.SoundLevel, dto.Temperature, dto.Humidity, DateTime.Now);
+            sensorService.CreateSensor(dto.DeviceId, dto.SoundLevel, (int)dto.Temperature, (int)dto.Humidity, DateTime.Now);
             
             return Task.CompletedTask;
             

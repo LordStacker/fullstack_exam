@@ -22,37 +22,64 @@ namespace repository
             sensor_id as {nameof(Sensor.Id)},
             device_id as {nameof(Sensor.DeviceId)},
             sound_level as {nameof(Sensor.SoundLevel)},
-            temperature as {nameof(Sensor.Tempreature)},
+            temperature as {nameof(Sensor.Temperature)},
             humidity as {nameof(Sensor.Humidity)},
             date as {nameof(Sensor.Date)}
             from public.sensor;");
         }
 
-        public Sensor GetSensorById(int id)
+        public Sensor GetSensorByUserId(int userId)
         {
             using var connection = _dataSource.OpenConnection();
 
-            return connection.QueryFirst<Sensor>($@"select
-            sensor_id as {nameof(Sensor.Id)},
-            device_id as {nameof(Sensor.DeviceId)},
-            sound_level as {nameof(Sensor.SoundLevel)},
-            temperature as {nameof(Sensor.Tempreature)},
-            humidity as {nameof(Sensor.Humidity)},
-            date as {nameof(Sensor.Date)}
-            from public.sensor where sensor_id=@id;", new {id});
+            var sensor = connection.QueryFirstOrDefault<Sensor>($@"
+        SELECT 
+            s.sensor_id AS {nameof(Sensor.Id)},
+            s.device_id AS {nameof(Sensor.DeviceId)},
+            s.sound_level AS {nameof(Sensor.SoundLevel)},
+            s.temperature AS {nameof(Sensor.Temperature)},
+            s.humidity AS {nameof(Sensor.Humidity)},
+            s.date AS {nameof(Sensor.Date)}
+        FROM 
+            public.sensor AS s
+        INNER JOIN 
+            public.device AS d ON s.device_id = d.device_id
+        INNER JOIN 
+            public.user_to_device AS utd ON d.device_id = utd.device_id
+        WHERE 
+            utd.user_id = @userId
+            AND
+            s.date = (
+                SELECT MAX(date) 
+                FROM public.sensor 
+                WHERE device_id = s.device_id
+            );",
+                new { userId });
 
+            if (sensor == null)
+            {
+                throw new Exception($"No sensor data found for user with ID: {userId}");
+            }
+
+            return sensor;
         }
+
+
 
         public Sensor CreateSensor(Sensor sensor)
         {
-            using var connection = _dataSource.OpenConnection();
+            using (var connection = _dataSource.OpenConnection())
+            {
+                Console.WriteLine("connection opened");
+                   return connection.QueryFirst<Sensor>($@"insert into
+                            public.sensor (device_id, sound_level, temperature, humidity, date)
+                            values (@deviceId, @soundLevel, @temperature, @humidity, @date)
+                            returning *;",
+                             new {deviceId = sensor.DeviceId, soundLevel = sensor.SoundLevel, temperature = sensor.Temperature,
+                                    humidity = sensor.Humidity, date = sensor.Date});
+            }
 
-            return connection.QueryFirst<Sensor>($@"insert into
-            public.sensor (device_id, sound_level, temperature, humidity, date)
-            values (@deviceId, @soundLevel, @temperature, @humidity, @date)
-            returning *;",
-             new {deviceId = sensor.DeviceId, soundLevel = sensor.SoundLevel, temperature = sensor.Tempreature,
-                    humidity = sensor.Humidity, date = sensor.Date});
+         
         }
 
         public Sensor UpdateSensor(Sensor sensor, int sensorId)
@@ -66,7 +93,7 @@ namespace repository
             humidity = @humidity,
             date = @date
             WHERE sensor_id = @sensorId
-            RETURNING *;", new {soundLevel = sensor.SoundLevel, temperature = sensor.Tempreature,
+            RETURNING *;", new {soundLevel = sensor.SoundLevel, temperature = sensor.Temperature,
                                 humidity = sensor.Humidity, date = sensor.Date, sensorId});
         }
 
