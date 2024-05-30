@@ -14,9 +14,8 @@ namespace api
     {
         private IMqttClient mqttClient;
 
-        
         private SensorData? _sensorData;
-        
+
         public async Task<bool> ConnectToBrokerAsync()
         {
             try
@@ -29,10 +28,10 @@ namespace api
                     .WithCredentials(Environment.GetEnvironmentVariable("flespiconn"), "")
                     .WithProtocolVersion(MqttProtocolVersion.V500)
                     .Build();
-                
+
                 await mqttClient.ConnectAsync(mqttClientOptions, CancellationToken.None);
                 Console.WriteLine("Connected to MQTT broker successfully.");
-                
+
                 var mqttSubscribeOptions = mqttFactory.CreateSubscribeOptionsBuilder()
                     .WithTopicFilter(f => f.WithTopic(Environment.GetEnvironmentVariable("topic")))
                     .Build();
@@ -40,8 +39,8 @@ namespace api
                 mqttClient.ApplicationMessageReceivedAsync += async e =>
                 {
                     await SendMessageSomewhereElseAsync(JsonConvert.DeserializeObject<SensorData>(e.ApplicationMessage.ConvertPayloadToString()) ?? throw new InvalidCastException("Could not deserialize"));
-                }; 
-               
+                };
+
                 return true;
             }
             catch (MqttCommunicationException ex)
@@ -56,8 +55,7 @@ namespace api
             }
         }
         private async Task SendMessageSomewhereElseAsync(SensorData sensorData)
-        {
-            Console.WriteLine(System.Text.Json.JsonSerializer.Serialize(sensorData));
+        {            
             int deviceId = sensorData.device_id;
             decimal soundLevel = sensorData.sound_level;
             int temperature = (int)sensorData.temperature;
@@ -71,8 +69,18 @@ namespace api
             Console.WriteLine(date);
             try
             {
+                var message = "";
+                message += (soundLevel > 60 ? $"High sound in the room db: {soundLevel}\n" : "") +
+                (temperature > 32 ? $"High Temperature in the room {temperature}\n" : "") +
+                (humidity > 55 ? $"High Humidity in the room {humidity}" : "");
+
+                if (message.Length > 0)
+                {
+                    await Task.Delay(5000);
+                    sensorService.SendNotification(9, message);
+                }
                 var returned = sensorService.CreateSensor(deviceId, soundLevel, temperature, humidity, date);
-                Console.WriteLine(System.Text.Json.JsonSerializer.Serialize(returned));
+                
             }
             catch (Exception e)
             {
@@ -81,7 +89,7 @@ namespace api
                 Console.WriteLine(e.StackTrace);
             }
 
-            
+
         }
     }
 }

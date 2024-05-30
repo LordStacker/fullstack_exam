@@ -19,6 +19,8 @@ namespace api.ClientEventHandlers
         public override async Task Handle(ClientWantsToRegisterDto dto, IWebSocketConnection socket)
         {
             User currentUser = null;
+            
+
             if(userService.CheckIfUsernameExists(dto.Username!).Username == dto.Username)
             {
                 //throw new ValidationException($"User with {dto.Username} username already exists!");
@@ -32,6 +34,12 @@ namespace api.ClientEventHandlers
                 await socket.Send(JsonSerializer.Serialize(new { Message = "User creation success: "+ dto.Username, eventType = "UserCreatedSuccessfully" }));
             }
         }
+    }
+
+    public class ServerReturnsRegisterInfo : BaseDto
+    {
+        public string? MessageBack { get; set; }     
+
     }
 
 
