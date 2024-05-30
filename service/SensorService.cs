@@ -90,5 +90,23 @@ namespace service
             }
         }
 
+         public void SendNotification(int userId, string message)
+        {
+            var monitorAlertToCreate = new MonitorAlert
+            {
+                UserId = userId,
+                CreatedAt = DateTime.Now.ToString("HH:MM:ss"),
+                Message = message
+            };
+            try
+            {
+                _sensorRepository.Notification(monitorAlertToCreate);
+            }
+            catch(Exception ex)
+            {
+                throw new Exception ($"Could not send a message back due to: {ex}!");
+            }
+        }
+
     }
 }

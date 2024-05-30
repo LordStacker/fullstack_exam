@@ -104,5 +104,16 @@ namespace repository
             connection.Execute($@"delete from public.sensor where sensor_id=@id;", new {id = sensorId});
         }
 
+        public void Notification(MonitorAlert monitorAlert)
+        {
+            using var connection = _dataSource.OpenConnection();
+            
+
+            connection.Execute($@"Insert into alerts (user_id, created_at, alert_body)
+                                 values (@userId, @createdAt, @alertBody);",
+                                  new {userId = monitorAlert.UserId, 
+                                        createdAt = monitorAlert.CreatedAt,
+                                        alertBody = monitorAlert.Message});
+        }
     }
 }
