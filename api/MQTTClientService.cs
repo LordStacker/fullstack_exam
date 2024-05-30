@@ -55,18 +55,13 @@ namespace api
             }
         }
         private async Task SendMessageSomewhereElseAsync(SensorData sensorData)
-        {            
+        {          
             int deviceId = sensorData.device_id;
             decimal soundLevel = sensorData.sound_level;
             int temperature = (int)sensorData.temperature;
             int humidity = (int)sensorData.humidity;
             DateTime date = DateTime.Now;
-
-            Console.WriteLine(deviceId);
-            Console.WriteLine(soundLevel);
-            Console.WriteLine(temperature);
-            Console.WriteLine(humidity);
-            Console.WriteLine(date);
+            var userId = sensorService.getUserSensorId(deviceId);
             try
             {
                 var message = "";
@@ -77,7 +72,7 @@ namespace api
                 if (message.Length > 0)
                 {
                     await Task.Delay(5000);
-                    sensorService.SendNotification(9, message);
+                    sensorService.SendNotification(userId, message);
                 }
                 var returned = sensorService.CreateSensor(deviceId, soundLevel, temperature, humidity, date);
                 

@@ -24,32 +24,35 @@ namespace service
                 throw new Exception($"Could not return all the sensors due to this: {ex.Message}");
             }
         }
+
         public Sensor GetSensorByUserId(int userId)
         {
             try
             {
                 return _sensorRepository.GetSensorByUserId(userId);
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 throw new Exception($"Could not return the sensor with id: {userId} due to this: {ex.Message}");
             }
         }
+
         public Sensor CreateSensor(int deviceId, decimal soundLevel, int temperature, int humidity, DateTime date)
         {
-        
-            try
-            {    var sensorToCreate = new Sensor
-                                            {
-                                                DeviceId = deviceId,
-                                                SoundLevel = soundLevel,
-                                                Temperature =  temperature,
-                                                Humidity =  humidity,
-                                                Date = date
-                                            };
-                                            Console.WriteLine("new sensor: "+JsonSerializer.Serialize(sensorToCreate));
 
-                return  _sensorRepository.CreateSensor(sensorToCreate);
+            try
+            {
+                var sensorToCreate = new Sensor
+                {
+                    DeviceId = deviceId,
+                    SoundLevel = soundLevel,
+                    Temperature = temperature,
+                    Humidity = humidity,
+                    Date = date
+                };
+                Console.WriteLine("new sensor: " + JsonSerializer.Serialize(sensorToCreate));
+
+                return _sensorRepository.CreateSensor(sensorToCreate);
             }
             catch (Exception ex)
             {
@@ -58,6 +61,7 @@ namespace service
 
             }
         }
+
         public void DeleteSensor(int sensorId)
         {
             try
@@ -69,8 +73,9 @@ namespace service
                 throw new Exception($"Could not delete sensor with id {sensorId} due to this: {ex.Message}");
             }
         }
+
         public Sensor UpdateSensor(int sensorId, decimal soundLevel,
-                                     decimal temperature, decimal humidity)
+            decimal temperature, decimal humidity)
         {
             var updatedSensor = new Sensor
             {
@@ -90,5 +95,34 @@ namespace service
             }
         }
 
+        public void SendNotification(int userId, string message)
+        {
+            var monitorAlertToCreate = new MonitorAlert
+            {
+                UserId = userId,
+                CreatedAt = DateTime.Now.ToString("HH:MM:ss"),
+                Message = message
+            };
+            try
+            {
+                _sensorRepository.Notification(monitorAlertToCreate);
+            }
+            catch (Exception ex)
+            {
+                throw new Exception($"Could not send a message back due to: {ex}!");
+            }
+        }
+
+        public int getUserSensorId(int deviceId)
+        {
+            try
+            {
+                return _sensorRepository.GetUserIdByDeviceId(deviceId);
+            }
+            catch (Exception ex)
+            {
+                throw new Exception($"Could not send a message back due to: {ex}!");
+            }
+        }
     }
 }

@@ -78,6 +78,24 @@ namespace service
                 throw new Exception($"Could not create user this user due to this error: {ex.Message}");
             }
         }
+        
+        public Token UpsertToken(int? userId, string token)
+        {
+            var tokenToUpsert = new Token
+            {
+                UserId = userId,
+                TokenValue = token
+            };
+
+            try
+            {
+                return _repository.UpsertToken(tokenToUpsert);
+            }
+            catch(Exception ex)
+            {
+                throw new Exception($"Could not upsert token");
+            }
+        }
 
     }
 }
