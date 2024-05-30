@@ -115,5 +115,17 @@ namespace repository
                                         createdAt = monitorAlert.CreatedAt,
                                         alertBody = monitorAlert.Message});
         }
+        
+        public int GetUserIdByDeviceId(int deviceId)
+        {
+            using var connection = _dataSource.OpenConnection();
+            var userId = connection.QueryFirstOrDefault<int>(
+                @"SELECT user_id
+          FROM user_to_device
+          WHERE device_id = @deviceId;",
+                new { deviceId });
+
+            return userId;
+        }
     }
 }

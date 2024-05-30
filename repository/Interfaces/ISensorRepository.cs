@@ -14,5 +14,7 @@ namespace repository.Interfaces
         Sensor UpdateSensor(Sensor sensor, int sensorId);
         void DeleteSensor(int sensorId);
         void Notification(MonitorAlert monitorAlert);
+
+        int GetUserIdByDeviceId(int deviceId);
     }
 }
